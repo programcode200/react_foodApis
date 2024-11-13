@@ -841,7 +841,6 @@ Each category "remembers" its unique index due to closures, so React automatical
 setShowIndex={() => setShowIndex(index === showIndex ? null : index)}
 
 
-
           Scenario 1: Click on Category A
           You click on Category A.
           The setShowIndex function runs:
