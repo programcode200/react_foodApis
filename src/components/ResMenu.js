@@ -46,7 +46,6 @@ const ResMenu = () => {
 
       {categories.map((category, index) => {
         //This is controlled component
-        console.log("Current index:", index);
         return (
           <ResCategory
             key={category?.card?.card?.title}
