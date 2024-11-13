@@ -31,7 +31,6 @@ const ResMenu = () => {
         "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
     );
 
-  console.log("categories", categories);
 
   return (
     <div className="menu text-center mt-0 py-4 bg-slate-300">
