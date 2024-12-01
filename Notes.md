@@ -860,3 +860,171 @@ setShowIndex={() => setShowIndex(index === showIndex ? null : index)}
           The check index === showIndex is now true (since 0 === 0).
           It evaluates the expression to null.
           setShowIndex(null) sets showIndex to null, closing Category A.
+
+************************************************************************ Lifting the state up ******************************************************************************************
+
+
+
+************************************************************************ Props Drilling ******************************************************************************************
+
+React has one way data flow means :- Parent to childrens like way.
+
+if want to give data to 1 or 2 level it is ok but when we want to pass data in deep level then it getting problem.
+
+ReactContext use for avoid props dealing
+    - for creating context create file.
+    - const UserContext = createContext({
+      loggedInUser : "Default User" });
+    - for accessing that context data you do like ::- const data = useContext(UserContext)
+
+
+*********** *********** *********** *********** *********** *********** *********** *********** *********** 
+
+
+How can you call and use the Context inside class based component. use as component
+
+ <UserContext.Consumer>
+    {({loggedInUser})=> <h4 className="font-bold">{loggedInUser}</h4>}
+  </UserContext.Consumer>
+
+Imagine you have a "global storage box" called UserContext where you keep some data (like a user's name or login status).
+Consumer is a tool that allows any component to "open the box" and use the data inside it.
+Consumer: Any component that uses <UserContext.Consumer> can read the data. Consumer gets the data and uses it in the UI.
+
+
+
+How Consumers Work:
+A Consumer doesn’t directly give you the context value as a variable. Instead, it expects a function as a child.
+This function will receive the current context value as an argument. The reason for this is React's declarative rendering model.
+
+Why a Callback Function?
+The callback function:
+
+Provides the Context Value: React automatically calls this function and passes the context data into it.
+Handles React Re-Renders: If the context value changes, React re-runs the callback function to ensure the UI stays up-to-date.
+Without the function, there would be no way for the Consumer to hand off the context data to your component.
+
+
+
+The value prop is predefined and required by the Provider component in React's Context API. When you create a context with createContext, 
+it automatically expects the Provider component to accept a value prop to provide the data down to the consumers of that context.
+
+<UserContext.Provider value={{ loggedInUser: userName }}>
+    this <UserContext.Provider> provide the data to all child that wrap inside using value prop this provide to child or calling component using useContext.
+    only wrap content only access the value
+
+    
+Create Context with createContext: The createContext() function is used to create a context object, which contains both a Provider and a Consumer component.
+Once you wrap the components with UserContext.Provider, any component within it can access the value without needing to receive it as props. These components consume the context via the useContext hook or UserContext.Consumer.
+
+
+******************************************************************************************************************************************************************
+************************************************************************ Redux ******************************************************************************************
+******************************************************************************************************************************************************************
+
+  - install reduxjs/toolkit and react-redux
+  - build our store
+  - connect our store to our app
+  - slice (cartslice)
+  - dispatch (action)
+  - reducer (fn())
+  - selector
+
+
+Redux store kind of very big object with lot of data, kept in central global space. any component can access this redux store it can write and read.
+slices are those we want to create logical creation or part like cart, user
+
+********************* For Write Data *********************
+
+when we add item into cart we cannot do directly insted.
+when you click on add button dispatch an (action) and then call reducer fn() and update or modify our slice of redux store. and slice will updated or data will updated and item will added into slice.
+
+********************* For Read Data *********************
+
+when you want to read data from cart slice to header cart use selector and it will give the data 
+selector know as subscribing to the store(sink or link). if the data will change inside my store it will automatically change the header cart component. using link or sink selector(subscribing to the store)
+
+
+# payload 
+
+Purpose: It carries the information or data that the reducer needs to perform an update on the state.
+Structure: It can be any type of data — a number, string, object, or even an array, depending on what your reducer needs.
+
+# Why pass store to <Provider>?
+
+The store is the data source that Redux operates on.
+By passing the store as a prop, <Provider> ensures that all components in your application can access this central state.
+Without the store, Redux would have no state to manage or update.
+
+# working of provider
+
+How does <Provider> work internally?
+
+It uses React's Context API to pass the store down to all components in the component tree.
+When you use hooks like useSelector or useDispatch in child components, they internally access the store provided by <Provider>.
+Why is <Provider> necessary?
+
+Redux follows a single-source-of-truth philosophy. The store is the single source.
+React components need a way to interact with the store to read state or dispatch actions.
+<Provider> bridges the gap between the React component tree and the Redux store.
+
+# action and reducer
+Yes, (state, action) => { state.items.push(action.payload); } is the reducer.
+Yes, addItem is the action creator for the action type "cart/addItem".
+
+reducer is big reducer like container inside of that is slices
+reducer: {
+        cart: cartReducer,
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

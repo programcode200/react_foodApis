@@ -1,21 +1,22 @@
 import RestaurantContainer, { withOpenLabel } from "./RestaurantContainer";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 const Body = () => {
-  // Local State Variable 
+  // Local State Variable
 
   const [listOfRestaurant, setListOfRestaurant] = useState([]);
   const [filterNewRes, setFilterNewRes] = useState([]);
 
   const [searchText, setSearchText] = useState("");
 
+  const { loggedInUser, setUserName } = useContext(UserContext);
+
   const OpenLabelRes = withOpenLabel(RestaurantContainer);
-
   console.log(listOfRestaurant, "body renderrrr");
-
 
   useEffect(() => {
     fetchData();
@@ -37,11 +38,6 @@ const Body = () => {
       json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
   };
-
-
-
-
-
 
   // Conditinal rendering
 
@@ -95,6 +91,15 @@ const Body = () => {
         >
           Top Rated Restaurant
         </button>
+
+        <div className="m-3 flex items-center">
+          <label>UserName : </label>
+          <input
+            className="ml-2 border-2 border-black rounded-md"
+            value={loggedInUser}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+        </div>
       </div>
 
       <div className="flex flex-wrap">
@@ -109,7 +114,6 @@ const Body = () => {
         {/* {resList.map((restaurant) => {
             return <RestaurantContainer resData={restaurant} />;
           })} */}
-
 
         {filterNewRes.map((restaurant) => (
           <Link

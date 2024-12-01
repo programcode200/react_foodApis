@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
 import Header from "./components/Header";
@@ -6,12 +6,11 @@ import Body from "./components/Body";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Error from "./components/Error";
-import ResMenu from "./components/ResMenu"
+import ResMenu from "./components/ResMenu";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-
-
-
-
+import UserContext from "./utils/UserContext";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
 
 // const h1 = React.createElement("h1",{ id: "heading"}, "hello React")    ///react element at the end is js object
 
@@ -158,53 +157,76 @@ this is how create react element using core react
 
 //not using keys (not acceptable) <<< index as key <<<< unique key (best practice).
 
-const Grocery = lazy(()=> import("./components/Grocery"))
+const Grocery = lazy(() => import("./components/Grocery"));
+
+const About = lazy(() => import("./components/About"));
 
 const AppLayout = () => {
-  
+  const [userName, setUserName] = useState();
+
+  console.log(userName);
+
+  //authentication
+  useEffect(() => {
+    //make an api call and send username
+    const data = {
+      name: "virat",
+    };
+    setUserName(data.name);
+  }, []);
+
   return (
-    <div className="app">
-      <Header />
-      < Outlet/>
-    </div>
+    <Provider store={appStore}>
+      <UserContext.Provider value={{ loggedInUser: userName, setUserName }}>
+        <div className="app">
+          <Header />
+          <Outlet />
+        </div>
+      </UserContext.Provider>
+    </Provider>
   );
 };
 
 const appRouter = createBrowserRouter([
   {
     path: "/",
-    element: <AppLayout/>,
-    children:[
+    element: <AppLayout />,
+    children: [
       {
         path: "/",
-        element: <Body/>
+        element: <Body />,
       },
       {
         path: "/about",
-        element: <About/>
+        element: (
+          <Suspense fallback={<h1>Loading....</h1>}>
+            <About />
+          </Suspense>
+        ),
       },
       {
-        path:"/contact",
-        element:<Contact/>
+        path: "/contact",
+        element: <Contact />,
       },
       {
-        path:"/grocery",
-        element:<Suspense fallback={<h1>Loading....</h1>}><Grocery/></Suspense>
+        path: "/grocery",
+        element: (
+          <Suspense fallback={<h1>Loading....</h1>}>
+            <Grocery />
+          </Suspense>
+        ),
       },
       {
-        path:"/restaurants/:resId",
-        element:<ResMenu/>
+        path: "/restaurants/:resId",
+        element: <ResMenu />,
       },
     ],
-    errorElement: <Error/>
+    errorElement: <Error />,
   },
-  
-])
-
+]);
 
 const root = ReactDOM.createRoot(document.querySelector("#root"));
 
-root.render(<RouterProvider router={appRouter}/>);  //The router={appRouter} part passes the appRouter (which defines the routes of your app) as a prop to RouterProvider.
-                                                    //The RouterProvider uses appRouter to handle which component (like AppLayout, About, or Contact) should be displayed when a user navigates to a certain path (like /, /about, /contact).
+root.render(<RouterProvider router={appRouter} />); //The router={appRouter} part passes the appRouter (which defines the routes of your app) as a prop to RouterProvider.
+//The RouterProvider uses appRouter to handle which component (like AppLayout, About, or Contact) should be displayed when a user navigates to a certain path (like /, /about, /contact).
 //this syntax babel understand
-

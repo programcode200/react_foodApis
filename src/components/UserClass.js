@@ -1,5 +1,5 @@
 import React from "react";
-
+import UserContext from "../utils/UserContext";
 
 class UserClass extends React.Component {
   constructor(props) {
@@ -8,8 +8,8 @@ class UserClass extends React.Component {
     console.log(this.props);
 
     this.state = {
-      count: 0,
-      count2: 2,
+      // count: 0,
+      // count2: 2,
 
       userInfo: {
         id: "id",
@@ -47,13 +47,13 @@ class UserClass extends React.Component {
 
   render() {
     // const { name, location } = this.props;
-    const { count, count2 } = this.state;
+    // const { count, count2 } = this.state;
     const {id, login, avatar_url} = this.state.userInfo;
 
 
     return (
       <div className="user-card">
-        <h4>Count: {count}</h4>
+        {/* <h4>Count: {count}</h4>
         <button
           onClick={() => {
             // Never update state variable directly
@@ -66,10 +66,16 @@ class UserClass extends React.Component {
         >
           Count ++
         </button>
+        <h4>Count 2nd: {count2}</h4> */}
 
-        <h4>Count 2nd: {count2}</h4>
+
         <hr/>
-        <img src={avatar_url}/>
+        <div>LoggedIn User : 
+          <UserContext.Consumer>
+            {({loggedInUser})=> <h4 className="font-bold">{loggedInUser}</h4>}
+          </UserContext.Consumer>
+        </div>
+        <img className="mt-4" src={avatar_url}/>
         <h3>ID: {id} </h3>
         <h3>Name: {login}</h3>
         <h5>Contact: rohan@gmail.com</h5>

@@ -1,12 +1,22 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import mountainimg from "/food.jpg";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const [btnName, setBtnName] = useState("Login");
 
   const onlineStatus = useOnlineStatus();
+
+  const {loggedInUser} = useContext(UserContext)
+
+  // subscribing to store using Selector hook
+
+  const cartItems = useSelector((store) => store.cart.items)
+  console.log(cartItems);
+  
 
   // if no dependency array => useRffect is called on every component render
   // if dependency array is empty = []  => useEffect is called on initial render(just once)
@@ -17,9 +27,9 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="flex justify-between items-center shadow-lg m-2">
+    <div className="flex justify-between items-center rounded-md shadow-lg m-2">
       <div className="logo-container">
-        <img className="w-24" src={mountainimg} />
+        <img className="w-20" src={mountainimg} />
       </div>
       <div className="nav-items">
         <ul className="flex m-3 ">
@@ -36,7 +46,7 @@ const Header = () => {
           <li className="px-3">
             <Link to={"/grocery"}>Grocery</Link>
           </li>
-          <li className="px-3">Cart</li>
+          <li className="px-3">Cart - {cartItems.length} Items </li>
           <button
             className="px-3"
             onClick={() => {
@@ -46,6 +56,7 @@ const Header = () => {
           >
             {btnName}
           </button>
+          <li className="px-3 font-bold">{loggedInUser}</li>
         </ul>
       </div>
     </div>
