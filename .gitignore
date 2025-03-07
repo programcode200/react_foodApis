@@ -2,4 +2,4 @@
 /dist
 /Notes.txt
 .parcel -cache
-/coverage
+/coverage.parcel-cache/
