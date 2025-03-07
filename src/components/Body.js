@@ -16,6 +16,7 @@ const Body = () => {
   const { loggedInUser, setUserName } = useContext(UserContext);
 
   const OpenLabelRes = withOpenLabel(RestaurantContainer);
+
   console.log(listOfRestaurant, "body renderrrr");
 
   useEffect(() => {
@@ -34,6 +35,7 @@ const Body = () => {
     setListOfRestaurant(
       json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
+
     setFilterNewRes(
       json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
@@ -54,6 +56,8 @@ const Body = () => {
   if (!listOfRestaurant || listOfRestaurant.length === 0) {
     return <Shimmer />;
   }
+
+  
   // Ternery operator
   return (
     <div className="body">
@@ -84,9 +88,9 @@ const Body = () => {
           className="px-3 py-1 bg-blue-700 rounded-lg"
           onClick={() => {
             const filteredList = listOfRestaurant.filter(
-              (res) => res.info.avgRating > 4.2
+              (res) => Number(res.info.avgRating) > 4.5
             );
-            setListOfRestaurant(filteredList);
+            setFilterNewRes(filteredList);
           }}
         >
           Top Rated Restaurant

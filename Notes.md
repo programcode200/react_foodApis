@@ -393,7 +393,7 @@ Example: When you click on a link in a traditional website, like /about, the ser
 
 
 
-*****************************************************************************************  Dynamic Routing ********************************************************************
+********************************************************  Dynamic Routing **********************************
 
 why get TypeError
 
@@ -432,7 +432,7 @@ In summary:
 !resInfo.cards: Ensures the cards array exists within resInfo. If either of these doesn't exist, the code handles it safely (e.g., by showing a loading state).
 
 
-**************************************************** how Optional Chaining Works ******************************************************************************
+********************************************* how Optional Chaining Works ***************************************************
 
 const info = resInfo?.cards?.[2]?.card?.card?.info;
 This expression is equivalent to a series of checks that happen automatically. Here’s what happens step by step:
@@ -468,7 +468,7 @@ resInfo?.cards?.[2]?.card?.card?.info:
 Finally, if all previous checks have passed, it accesses resInfo.cards[2].card.card.info.
 
 
-***************************************************************************************** Class Based component ***************************************************************************************************************
+*************************************************** Class Based component ******************************************************
 
 why user Super(prps):
 Call the parent class's constructor: If a subclass (child class) needs to use or modify the constructor of its parent class, the super() function is called. It allows you to inherit the properties and behavior defined in the parent class. It must be called before accessing this in the subclass constructor.
@@ -575,7 +575,7 @@ The line const { name } = this.props; is simply a JavaScript destructuring assig
 ************* Never update state variable directly
                   count = count + 1
 
-***************************************************************** Class Based component Life cycle *****************************************************************
+***************************************************** Class Based component Life cycle ****************************************
 
 Inside the class based component, first component is call and create instance then constructor is called with state after that render method is called then after componentDidMount(use for api call) is called then after data is get then re-render the component.
 
@@ -584,7 +584,7 @@ parent-child class cycle:
 inside that first call the parent class constructor then call the render method when see there is child class calling <UserClass /> then all life cycle is complete inside the child class constructor => render => componentDidMount class called.
 after that return to parent class and then call to componentDidMount
 
-************************************************************************************************************************************************************************************************************************************************************
+*****************************************************************************************************************************************
 
 Parent-Child Component Lifecycle in Class-Based Components
 Parent Component Constructor
@@ -617,7 +617,7 @@ So yes, after the child’s lifecycle is complete (up to componentDidMount), Rea
 but the key detail is that the child’s componentDidMount completes before the parent’s componentDidMount is called.
 
 
-************************************************************************************************************************************************************************************************************************************************************
+*****************************************************************************************************************************************
 why we call api using componentDidMount
 
 Guaranteed Mounting
@@ -979,17 +979,164 @@ reducer: {
 
 
 
+# test cases 
+# Unit testing
+
+we are just testing one component that called unit testing, isolate that component and testing it.
 
 
+export const sum = (a, b) => {
+  return a + b;
+};
 
 
+import { sum } from "../sum";
+test("Sum function should calculate the sum of two numbers", ()=>{
+    const result = sum(10, 2);
+
+    //assertion
+    expect(result).toBe(12);
+})
+
+after run cmd 
+> npm run test
+
+# babel config
+
+Convert JSX to JavaScript
+React code often uses JSX, which is not valid JavaScript. Babel transforms JSX into React.createElement() calls, making it understandable by browsers.
 
 
+Babel is a tool that converts modern JavaScript (like ES6+) into older versions of JavaScript so that it works in all browsers, even those that don’t support the latest features. It helps developers write modern code without worrying about compatibility.
+
+Presets
+Presets in Babel are predefined configurations that bundle together plugins to target specific JavaScript features or environments. For example:
+
+@babel/preset-env: Transforms modern JavaScript into versions supported by older browsers or environments.
+@babel/preset-react: Adds support for transforming JSX (used in React) into JavaScript.
+@babel/preset-typescript: Supports TypeScript transformations.
+In simple terms: Presets are like pre-made recipes that tell Babel what features of your code need to be converted.
 
 
+const heading = screen.getByRole("heading");
+
+  //assertion
+  expect(heading).toBeInTheDocument();
 
 
+const inputbox = screen.getAllByRole("textbox");
 
+why can't use assertion with the getAllByRole
+
+getAllByRole Returns an Array
+The getAllByRole method returns an array of all elements that match the role "textbox". This is because there might be multiple input fields with that role in your rendered DOM.
+
+Since getAllByRole returns an array, you cannot use an assertion like toBeInTheDocument() directly because it expects a single DOM element, not an array.
+
+
+In Header.test.js file 
+
+need to import redux store because of Usecontext and the Router also because he dont know about this related to react 
+
+# login and logout btn test case
+  const loginbutton = screen.getByRole("button",{name: "Login"})
+  // const loginbtn = screen.getByText("Login")
+  // const cart = screen.getByText("🛒 - 0")
+
+  fireEvent.click(loginbutton)
+  const logoutbtn = screen.getByRole("button",{name: "Logout"})
+
+  expect(logoutbtn).toBeInTheDocument();
+
+# testing on props
+
+how to test props and check card
+
+ render(<RestaurantContainer resData={MOCK_DATA} />);
+
+  const name = screen.getByText("Pizza Hut");
+  expect(name).toBeInTheDocument();
+
+  need to use mockdata
+
+
+# how fetch use in test with mock fn()
+What the code does:
+You are mocking (faking) the fetch function using Jest.
+
+fetch is normally used to get data from a server, but in tests, you don’t want to actually make a network request.
+Instead, you make a mock fetch that returns fake data immediately without contacting the server.
+Key components of the code:
+1. global.fetch = jest.fn()
+What it does:
+This replaces the real fetch function with a mock function created by Jest.
+Why:
+It lets you control what fetch does during your tests so you can test your code without needing a real API.
+2. Mocking a resolved Promise:
+javascript
+Copy code
+Promise.resolve({
+    json: () => {
+        return Promise.resolve(data);
+    }
+});
+What happens here:
+The fetch mock returns a Promise that resolves immediately.
+The resolved value is an object with a json() method.
+3. The json() method:
+In a real fetch call, the json() method converts the server response into JavaScript objects.
+You are faking this behavior by:
+Adding a json() method to the returned object.
+Making json() return another Promise that resolves with the fake data.
+Putting it all together:
+When you call fetch() in your test, instead of making a real network request, it does this:
+Returns a Promise that resolves with a fake response object.
+This fake response object has a json() method.
+Calling json() on the fake response gives another Promise that resolves to the data.
+Example in action:
+Suppose the data variable is:
+
+javascript
+Copy code
+const data = { message: "Hello, world!" };
+If you call fetch in your test:
+
+javascript
+Copy code
+fetch("https://api.example.com/data")
+    .then(response => response.json())
+    .then(result => console.log(result));
+Here’s what happens:
+
+The mocked fetch immediately returns the fake response.
+Calling response.json() gives a Promise that resolves to { message: "Hello, world!" }.
+The final output is:
+css
+Copy code
+{ message: "Hello, world!" }
+Why this is useful in testing:
+No real API calls: You avoid making actual HTTP requests during tests, which is faster and more reliable.
+Custom responses: You can control what fetch returns, simulating various scenarios (e.g., successful responses, errors).
+Isolated testing: Tests focus on your code, not on whether the API is working.
+Code summary with example usage:
+Here’s the full flow in an example:
+
+javascript
+Copy code
+const data = { message: "Hello, world!" };
+
+// Mock the fetch function
+global.fetch = jest.fn(() => {
+    return Promise.resolve({
+        json: () => Promise.resolve(data)
+    });
+});
+
+// Using the mock in a test
+fetch("https://api.example.com/data")
+    .then(response => response.json()) // Simulates calling the server and getting JSON
+    .then(result => console.log(result)); // Output: { message: "Hello, world!" }
+Let me know if you'd like further clarification or a deeper dive into any part!
 
 
 

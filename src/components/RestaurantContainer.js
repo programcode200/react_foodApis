@@ -6,6 +6,9 @@ const RestaurantContainer = (props) => {
 
   const { resData } = props;
 
+  // console.log("resdata",resData);
+  
+
   const { cloudinaryImageId, name, cuisines, avgRating, costForTwo, sla } = resData?.info;
   const { slaString } = sla;
 

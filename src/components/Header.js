@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import mountainimg from "/food.jpg";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
 import UserContext from "../utils/UserContext";
@@ -10,13 +9,14 @@ const Header = () => {
 
   const onlineStatus = useOnlineStatus();
 
-  const {loggedInUser} = useContext(UserContext)
+  const { loggedInUser } = useContext(UserContext);
+
+  const mountainimg = "/food.jpg";
 
   // subscribing to store using Selector hook
 
-  const cartItems = useSelector((store) => store.cart.items)
+  const cartItems = useSelector((store) => store.cart.items);
   console.log(cartItems);
-  
 
   // if no dependency array => useRffect is called on every component render
   // if dependency array is empty = []  => useEffect is called on initial render(just once)
@@ -39,14 +39,16 @@ const Header = () => {
           </li>
           <li className="px-3">
             <Link to={"/about"}>About Us</Link>
-          </li> 
+          </li>
           <li className="px-3">
             <Link to={"/contact"}>Contact Us</Link>
           </li>
           <li className="px-3">
             <Link to={"/grocery"}>Grocery</Link>
           </li>
-          <li className="px-3">Cart - {cartItems.length} Items </li>
+          <li className="px-3 font-bold">
+            <Link to={"/cart"}>🛒 - {cartItems.length}</Link>
+          </li>
           <button
             className="px-3"
             onClick={() => {
