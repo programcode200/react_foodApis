@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
 import UserContext from "../utils/UserContext";
 import { useSelector } from "react-redux";
+import image from "../assets/logo.jpg";
+
 
 const Header = () => {
   const [btnName, setBtnName] = useState("Login");
@@ -27,7 +29,7 @@ const Header = () => {
   return (
     <div className="flex justify-between items-center rounded-md shadow-lg m-2">
       <div className="logo-container">
-        <img className="w-20" src="../assets/logo.jpg" alt="logo"/>
+        <img className="w-20" src={image} alt="logo"/>
       </div>
       <div className="nav-items">
         <ul className="flex m-3 ">
