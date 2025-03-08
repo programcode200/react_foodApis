@@ -171,7 +171,7 @@ const AppLayout = () => {
   useEffect(() => {
     //make an api call and send username
     const data = {
-      name: "virat",
+      name: "Rohan",
     };
     setUserName(data.name);
   }, []);
