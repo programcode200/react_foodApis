@@ -11,8 +11,6 @@ const Header = () => {
 
   const { loggedInUser } = useContext(UserContext);
 
-  const mountainimg = "/food.jpg";
-
   // subscribing to store using Selector hook
 
   const cartItems = useSelector((store) => store.cart.items);
@@ -29,7 +27,7 @@ const Header = () => {
   return (
     <div className="flex justify-between items-center rounded-md shadow-lg m-2">
       <div className="logo-container">
-        <img className="w-20" src={mountainimg} />
+        <img className="w-20" src="../assets/logo.jpg" alt="logo"/>
       </div>
       <div className="nav-items">
         <ul className="flex m-3 ">
